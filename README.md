@@ -1,6 +1,6 @@
 # ShootEXP — 经验射击
 
-**最新版本：v1.3.2** | [下载 Release](https://github.com/qumingjam/ShootEXP-folia/releases/tag/v1.3.2)
+**最新版本：v1.3.3** | [下载 Release](https://github.com/qumingjam/ShootEXP-folia/releases/tag/v1.3.3)
 
 Player interaction based experience shooting system.
 
@@ -38,7 +38,7 @@ cd ShootEXP-folia
 mvn clean package
 ```
 
-产出：`target/ShootEXP-1.3.1.jar`
+产出：`target/ShootEXP-1.3.3.jar`
 
 ---
 
