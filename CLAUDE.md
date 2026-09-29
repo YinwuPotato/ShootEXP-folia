@@ -4,7 +4,7 @@
 - **技术栈**: Java 21, Maven, Paper API 1.21.4
 - **打包**: `mvn clean package` → `target/ShootEXP-folia-<version>.jar`
 - **Folia 兼容**: 是（folia 分支）
-- **GitHub**: https://github.com/qumingjam/ShootEXP-folia
+- **GitHub**: https://github.com/YinwuPotato/ShootEXP-folia
 
 ## 功能
 - 玩家通过蹲起交互射出"经验"物品
