@@ -38,7 +38,20 @@ Player interaction based experience shooting system.
 | `/shootexp toggle <messages\|attack>` | 切换消息接收 / 被攻击权限 |
 | `/shootexp gui` | 打开设置 GUI |
 
-权限：`status` / `toggle` / `gui` 默认所有玩家；`item` / `restore` / `set` / `reload` 默认仅 OP。
+权限节点（完整名）：
+
+| 权限 | 默认 | 覆盖命令 |
+|---|---|---|
+| `shootexp.status` | 所有人 | `/shootexp status` |
+| `shootexp.toggle` | 所有人 | `/shootexp toggle` |
+| `shootexp.gui` | 所有人 | `/shootexp gui` |
+| `shootexp.item` | OP | `/shootexp item` |
+| `shootexp.restore` | OP | `/shootexp restore` |
+| `shootexp.set` | OP | `/shootexp set` |
+| `shootexp.reload` | OP | `/shootexp reload` |
+
+> ⚠️ `shootexp.toggle` 与 `shootexp.gui` 目前只在 `plugin.yml` 里声明，代码中并未做
+> `hasPermission` 检查 —— 即所有玩家都能使用这两个命令。若需要严格限制，需在代码里补检查。
 
 ---
 
@@ -75,6 +88,17 @@ mvn clean package
 
 产出：`target/ShootEXP-1.3.3.jar`
 
+> **前置步骤（首次构建必需）**：本插件依赖共享库 `YinwuPluginLib`，而它不在 Maven 中央仓库。
+> 首次构建前先克隆并安装一次：
+>
+> ```bash
+> git clone https://github.com/YinwuPotato/YinwuPluginLib.git
+> cd YinwuPluginLib && mvn clean install
+> ```
+>
+> 之后回到本仓库 `mvn clean package` 即可。父 POM（`net.yinwu:YinwuPlugins:1.0.1`）
+> 已随仓库提供在 `parent/pom.xml`，无需额外操作。
+
 ---
 
 ## Dependencies | 依赖
@@ -82,8 +106,9 @@ mvn clean package
 - **Java 21**
 - **Paper API 1.21+**（provided）
 - **Folia**（兼容区域线程调度）
+- **exp4j 0.4.8**（compile 范围，已被 shade 打进 jar）—— 用于解析 `required-attack-times` / `shoot-amount` 的数学公式
 - **SkillAPI**（软依赖，`exp-type` 使用 SKILLAPI 时需要）
-- **Brewery / BreweryX**（软依赖，避免食用经验物品时与酒桶交互冲突）
+- **Brewery**（软依赖，避免食用经验物品时与酒桶交互冲突；代码同时兼容 BreweryX）
 
 ---
 
