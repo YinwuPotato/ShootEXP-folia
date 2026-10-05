@@ -88,16 +88,8 @@ mvn clean package
 
 产出：`target/ShootEXP-1.3.3.jar`
 
-> **前置步骤（首次构建必需）**：本插件依赖共享库 `YinwuPluginLib`，而它不在 Maven 中央仓库。
-> 首次构建前先克隆并安装一次：
->
-> ```bash
-> git clone https://github.com/YinwuPotato/YinwuPluginLib.git
-> cd YinwuPluginLib && mvn clean install
-> ```
->
-> 之后回到本仓库 `mvn clean package` 即可。父 POM（`net.yinwu:YinwuPlugins:1.0.1`）
-> 已随仓库提供在 `parent/pom.xml`，无需额外操作。
+> 本插件**不依赖** `YinwuPluginLib`（它 `extends JavaPlugin`，是独立的 Folia 分支）。
+> 父 POM（`net.yinwu:YinwuPlugins:1.0.1`）已随仓库提供在 `parent/pom.xml`，无需额外操作。
 
 ---
 
@@ -107,8 +99,22 @@ mvn clean package
 - **Paper API 1.21+**（provided）
 - **Folia**（兼容区域线程调度）
 - **exp4j 0.4.8**（compile 范围，已被 shade 打进 jar）—— 用于解析 `required-attack-times` / `shoot-amount` 的数学公式
-- **SkillAPI**（软依赖，`exp-type` 使用 SKILLAPI 时需要）
-- **Brewery**（软依赖，避免食用经验物品时与酒桶交互冲突；代码同时兼容 BreweryX）
+- ⚠️ **Brewery**（**必须安装**）—— 用于判断右键的是不是酒桶/酿药锅
+- ⚠️ **SkillAPI**（**必须安装**）—— `exp-type: SKILLAPI` 时用于发放 SkillAPI 经验
+
+### ⚠️ 为什么 Brewery / SkillAPI 不能缺席
+
+`plugin.yml` 里它们声明为 `softdepend`，但**实际不能缺席**：
+`EatListener` 在**方法体内**直接引用了 `com.dre.brewery.api.BreweryApi` 与 `com.sucy.skill.SkillAPI`
+（`EatListener.java:42` 与 `:54`），两者都是 `provided` 范围、不会打进 jar。
+JVM 校验方法字节码时会解析这些类型引用，因此**缺任一插件都会让右键食用抛出 `NoClassDefFoundError`**，
+经验物品无法食用 —— 即使 `exp-type` 没设成 `SKILLAPI`、即使从不靠近酒桶。
+
+> 如果你希望它们真正可选，需要把这两处调用拆到独立类里并在入口用反射调用（当前代码未这样做）。
+
+## License | 许可证
+
+MIT —— 见 [LICENSE](LICENSE)。原始插件作者为 Fengshuai(R_Josef)，本仓库是 Folia 兼容分支（维护：Qumingjam）。
 
 ---
 
