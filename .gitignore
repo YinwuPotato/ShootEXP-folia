@@ -9,3 +9,7 @@ dependency-reduced-pom.xml
 
 # Player data (should not be committed)
 playerdata.yml
+
+### 构建/运行产物（统一补充）###
+*.stackdump
+*.jar
